@@ -6,7 +6,8 @@ from mpmath import eps, fadd, ldexp, mp, mpc, mpf
 from mpmath.libmp import (MPZ, fone, from_float, from_man_exp, fzero, mpf_add,
                           mpf_neg, mpf_perturb, mpf_sub, round_ceiling,
                           round_down, round_floor, round_nearest, round_up,
-                          to_float, trailing)
+                          to_float)
+from mpmath.libmp.libintmath import trailing
 
 
 def test_trailing():

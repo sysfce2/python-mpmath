@@ -13,10 +13,6 @@ from functools import lru_cache
 from .backend import MPZ, MPZ_ONE, MPZ_ZERO, gmpy
 
 
-small_trailing = [0] * 256
-for j in range(1,8):
-    small_trailing[1<<j::1<<(j+1)] = [j] * (1<<(7-j))
-
 def giant_steps(start, target, n=2):
     """
     Return a list of integers ~=
@@ -57,24 +53,13 @@ def lshift(x, n):
 
 def trailing(n):
     """Count the number of trailing zero bits in abs(n)."""
-    if not n:
-        return 0
-    low_byte = n & 0xff
-    if low_byte:
-        return small_trailing[low_byte]
-    t = 8
-    n >>= 8
-    while not n & 0xff:
-        n >>= 8
-        t += 8
-    return t + small_trailing[n & 0xff]
+    return MPZ((n & (-n)).bit_length() - 1 if n else 0)
 
 if gmpy and hasattr(MPZ, 'bit_scan1'):
     def trailing(n):
         return MPZ(n).bit_scan1() if n else MPZ(0)
 
 # Used to avoid slow function calls as far as possible
-trailtable = [trailing(n) for n in range(256)]
 bctable = [n.bit_length() for n in range(1024)]
 
 # TODO: speed up for bases 2, 4, 8, 16, ...

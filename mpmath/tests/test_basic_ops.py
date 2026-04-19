@@ -183,6 +183,8 @@ def test_mpf_init():
     assert mpf('0x1.4ace478p+33') == mpf(11100000000.0)
     assert mpf('0x1.4ace478p+33', base=0) == mpf(11100000000.0)
     assert mpf('1.4ace478p+33', base=16) == mpf(11100000000.0)
+    assert mpf((1, 17813873926281399, -78, 54), prec=5,
+               rounding='u') == mpf('-5.9604644775390625e-8')
 
     assert mpf(float('+inf')) == +inf
     assert mpf(float('-inf')) == -inf

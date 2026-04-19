@@ -9,7 +9,7 @@ import sys
 
 from .backend import BACKEND, MPZ, MPZ_FIVE, MPZ_ONE, MPZ_ZERO, gmpy, int_types
 from .libintmath import (bctable, bin_to_radix, isqrt, numeral, sqrtrem,
-                         stddigits, trailtable)
+                         stddigits, trailing)
 
 
 class ComplexResult(ValueError):
@@ -153,13 +153,7 @@ def _normalize(sign, man, exp, bc, prec, rnd):
         bc = prec
     # Strip trailing bits
     if not man & 1:
-        t = trailtable[man & 255]
-        if not t:
-            while not man & 255:
-                man >>= 8
-                exp += 8
-                bc -= 8
-            t = trailtable[man & 255]
+        t = trailing(man)
         man >>= t
         exp += t
         bc -= t
@@ -169,7 +163,7 @@ def _normalize(sign, man, exp, bc, prec, rnd):
     # so this is easy to check for.
     if man == 1:
         bc = 1
-    return sign, man, exp, bc
+    return sign, man, int(exp), int(bc)
 
 _exp_types = (int,)
 
@@ -207,19 +201,9 @@ def from_man_exp(man, exp, prec=0, rnd=round_fast):
         if not man:
             return fzero
         if not man & 1:
-            if man & 2:
-                return (sign, man >> 1, exp + 1, bc - 1)
-            t = trailtable[man & 255]
-            if not t:
-                while not man & 255:
-                    man >>= 8
-                    exp += 8
-                    bc -= 8
-                t = trailtable[man & 255]
-            man >>= t
-            exp += t
-            bc -= t
-        return (sign, man, exp, bc)
+            t = trailing(man)
+            return sign, man >> t, int(exp + t), int(bc - t)
+        return sign, man, exp, bc
     return normalize(sign, man, exp, bc, prec, rnd)
 
 int_cache = dict((n, from_man_exp(n, 0)) for n in range(-10, 257))
