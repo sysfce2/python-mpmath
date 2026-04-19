@@ -27,7 +27,7 @@ from .libhyper import (NoConvergence, make_hyp_summator, mpc_agm, mpc_agm1,
 from .libintmath import (bin_to_radix, eulernum, gcd, giant_steps, ifac, ifib,
                          isprime, isqrt, isqrt_fast, isqrt_small, list_primes,
                          moebius, numeral, sqrt_fixed, sqrtrem, stirling1,
-                         stirling2, trailing)
+                         stirling2)
 from .libmpc import (complex_int_pow, mpc_abs, mpc_acos, mpc_acosh, mpc_add,
                      mpc_add_mpf, mpc_arg, mpc_asin, mpc_asinh, mpc_atan,
                      mpc_atanh, mpc_cbrt, mpc_ceil, mpc_conjugate, mpc_cos,
